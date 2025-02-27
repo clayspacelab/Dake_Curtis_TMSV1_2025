@@ -1,5 +1,6 @@
 clear; close all; clc;
 warning('off', 'all');
+addpath('/d/DATD/hyper/software/fieldtrip-20220104/');
 
 t_stamp                                     = [0.5 2 3 4.5];
 f_stamp                                     = [7 20];
@@ -21,7 +22,6 @@ tidx_after                      = find((mTFR.NT.pin.ipsi.time > t_stamp(3)) ...
 tidx                            = [tidx_before tidx_after];
 fidx                            = find((mTFR.NT.pin.ipsi.freq > f_stamp(1)) ...
     & (mTFR.NT.pin.ipsi.freq < f_stamp(2)));
-% p.figure                                = fig_path;
 
 
 %% If running for all subjects regardless
@@ -32,7 +32,6 @@ for tt = t_types_in
     mTFR.NT.(tt).all.powspctrm          = mean(mTFR.NT.(tt).all.powspctrm, 4, 'omitnan');
 end
 mTFR.NT.pout.all.powspctrm              = mean(mTFR.NT.pout.all.powspctrm, 4, 'omitnan');
-mTFR.NT.aout.all.powspctrm              = mean(mTFR.NT.aout.all.powspctrm, 4, 'omitnan');
 for tt = t_types
     mTFR.T.(tt).ipsi.powspctrm          = mean(mTFR.T.(tt).ipsi.powspctrm, 1, 'omitnan');
     mTFR.T.(tt).contra.powspctrm        = mean(mTFR.T.(tt).contra.powspctrm, 1, 'omitnan');
@@ -40,20 +39,7 @@ for tt = t_types
 end
     
 
-% Figure names for master plots
-% figname.masterTFR_pro                       = [p.figure '/tfrplots/' tfr_type '/allsubs_TFRpro.png'];
-% figname.masterTFR_anti                      = [p.figure '/tfrplots/' tfr_type '/allsubs_TFRanti.png'];
-% figname.masterTOPO_pro                      = [p.figure '/topoplots/' tfr_type '/allsubs_TOPOpro.png'];
-% figname.masterTOPO_anti                     = [p.figure '/topoplots/' tfr_type '/allsubs_TOPOanti.png'];
 
-% Master figure plots for TFR and TOPO
-% if ~exist(figname.masterTFR_pro, 'file')
-    compare_conds(mTFR, tidx, fidx, 'p')
-    % saveas(gcf, figname.masterTFR_pro, 'png')
-    % compare_conds(mTFR, tidx, fidx, 'a')
-    % saveas(gcf, figname.masterTFR_anti, 'png')
-% end
-% if ~exist(figname.masterTOPO_pro, 'file')
     create_topo(mTFR, tidx, fidx, 'p', 'alpha')
     % saveas(gcf, figname.masterTOPO_pro, 'png')
     % create_topo(mTFR, tidx, fidx, 'a', 'alpha')
